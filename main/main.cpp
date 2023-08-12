@@ -130,9 +130,14 @@ struct Snake{
     }
 
     void begin(){
+        // set up display
+        _oled.setTextSize(1);         // set text size
+        _oled.setTextColor(WHITE);    // set text color
         _oled.setCursor(0,0);
+        
+        _oled.clearDisplay();
+        // draw "UI"
         _oled.println("Press any!");
-        // draw bounding box
         _oled.drawRect(oled.getCursorX(), oled.getCursorY(), 
                       SCREEN_HEIGHT, SCREEN_WIDTH - oled.getCursorY(), 1);
 
@@ -146,25 +151,32 @@ struct Snake{
     }
 
     void tick(Button direction, unsigned long ticks){
-        //oled.clearDisplay();
-        // draw score
-        _oled.setCursor(0,0);
-        _oled.println(_body.size()*100); // set te
-
         if(_dead){
             return;
         }
 
-        handleApple();
-
+        // read button state
         buttonHandler(direction);
+        if(_speed == Point(0,0)){
+            return;
+        }
+
+        // draw score
+        _oled.setCursor(0,0);
+        int16_t x,y;
+        uint16_t w,h;
+        _oled.getTextBounds("Press any!", 0,0,&x, &y, &w, &h);
+        _oled.fillRect(x,y,w,h,0);
+        _oled.println(_body.size()*5);
+
+        appleHandler();
 
         move();
 
         _oled.display();
     }
 
-    void handleApple(){
+    void appleHandler(){
         // if no apple spawn an apple
         if(_apple == Point(-1,-1)){
             do{
@@ -205,11 +217,6 @@ struct Snake{
     }
 
     void move(){
-        // don't do anything of speed is 0
-        if(_speed == Point(0,0)){
-            return;
-        }
-
         // get head and tail of snake
         Point tail = _body.back(); 
         Point new_head(_body.front());
@@ -239,7 +246,8 @@ struct Snake{
         _oled.writePixel(_body.front().x, _body.front().y, 1);
         
         // if snake can grow exit early
-        if(_extra_length--){
+        if(_extra_length){
+            _extra_length--;
             return; 
         }
 
@@ -250,7 +258,10 @@ struct Snake{
 
 extern "C" void app_main()
 {
+    // using arduino due to library support
     initArduino();
+
+    // init pins
     pinMode(HEARTBEAT_PIN, OUTPUT);
 
     pinMode(PIN_UP, INPUT_PULLUP);
@@ -265,30 +276,24 @@ extern "C" void app_main()
     pinMode(PIN_RIGHT, INPUT_PULLUP);
     attachInterrupt(PIN_RIGHT, keyChangeISR, FALLING);
 
-    Serial.begin(9600);
 
-    // initialize OLED display with I2C address 0x3C
-    if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-        Serial.println(F("failed to start SSD1306 OLED"));
-        while (1);
-    }
+    // initialize OLED display
+    oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+
 
     delay(2000);         // wait two seconds for initializing
     oled.setRotation(1);
     oled.clearDisplay(); // clear display
 
-    oled.setTextSize(1);         // set text size
-    oled.setTextColor(WHITE);    // set text color
-    oled.display();  
-    
+    // set up game object
     Snake snake(oled);
     snake.begin();
 
     while(true){
+        // tick snake game
         snake.tick(direction, millis());
-
+        // main loop heartbeat LED
         digitalWrite(HEARTBEAT_PIN, millis()%HEARTBEAT_PERIOD>HEARTBEAT_PERIOD/2);
-        //delay(1);
     }
 
 }
