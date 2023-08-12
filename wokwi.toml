@@ -1,0 +1,5 @@
+[wokwi]
+version = 1
+firmware = 'build\esp32-oled-snake.bin'
+elf = 'build\esp32-oled-snake.elf'
+gdbServerPort=3333

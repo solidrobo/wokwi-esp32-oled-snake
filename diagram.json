@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "author": "Kalle-Gustav Kruus",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 18.92, "left": 43.17, "attrs": {} },
+    {
+      "type": "board-ssd1306",
+      "id": "oled1",
+      "top": 10.05,
+      "left": 233.44,
+      "rotate": 270,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -31.91,
+      "left": 132.07,
+      "attrs": { "color": "red", "flip": "1" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 10.4, "left": 150.25, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 105.86,
+      "left": 254.4,
+      "attrs": { "color": "red", "key": "ArrowUp", "label": "UP" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd2", "top": 143.09, "left": 243.51, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": 166.1,
+      "left": 255.28,
+      "attrs": { "color": "blue", "key": "ArrowDown", "label": "DOWN" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd3", "top": 206.31, "left": 238.58, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn3",
+      "top": 166.2,
+      "left": 328.69,
+      "attrs": { "color": "yellow", "key": "ArrowRight", "label": "RIGHT" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd4", "top": 206.3, "left": 317.22, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn4",
+      "top": 165.68,
+      "left": 174.29,
+      "attrs": { "color": "green", "label": "LEFT", "key": "ArrowLeft" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd5", "top": 201.17, "left": 161.93, "attrs": {} },
+    { "type": "wokwi-vcc", "id": "vcc1", "top": -5.72, "left": 207, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd6", "top": 68.57, "left": 209.14, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd7", "top": 166.84, "left": 12.4, "attrs": {} },
+    { "type": "wokwi-vcc", "id": "vcc2", "top": 230.23, "left": 112.4, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "oled1:SCL", "esp:D22", "green", [ "v1.8", "h-62.94", "v3.14" ] ],
+    [ "esp:D21", "oled1:SDA", "yellow", [ "h20.35", "v-42.87", "h85.08" ] ],
+    [ "led1:A", "esp:D23", "green", [ "v0" ] ],
+    [ "led1:C", "gnd1:GND", "green", [ "v0" ] ],
+    [ "btn1:2.l", "gnd2:GND", "green", [ "h0" ] ],
+    [ "btn2:2.l", "gnd3:GND", "green", [ "h0" ] ],
+    [ "btn3:2.l", "gnd4:GND", "green", [ "h0" ] ],
+    [ "btn4:2.l", "gnd5:GND", "green", [ "h0" ] ],
+    [ "oled1:VCC", "vcc1:VCC", "red", [ "v-0.32", "h-33.3" ] ],
+    [ "oled1:GND", "gnd6:GND", "black", [ "h0" ] ],
+    [ "esp:GND.2", "gnd7:GND", "black", [ "h0" ] ],
+    [ "esp:3V3", "vcc2:VCC", "green", [ "v0" ] ],
+    [ "btn4:1.l", "esp:D15", "green", [ "h-11.09", "v-17.04" ] ],
+    [ "btn2:1.l", "esp:D2", "blue", [ "h-6.14", "v-16.52", "h-62.01", "v-13.26" ] ],
+    [ "btn3:1.l", "esp:D4", "gold", [ "h-0.85", "v-21.97", "h-84.68", "v-18.31" ] ],
+    [ "btn1:1.l", "esp:D5", "red", [ "h-58.34", "v-8.64" ] ]
+  ],
+  "dependencies": {}
+}
